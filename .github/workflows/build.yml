@@ -24,3 +24,8 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=inthetouch
+            -Dsonar.projectKey=Inthetouch_frontend-project-11
+            -Dsonar.projectBaseDir=@hexlet/code

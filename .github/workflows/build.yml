@@ -25,4 +25,3 @@ jobs:
           args: >
             -Dsonar.organization=inthetouch
             -Dsonar.projectKey=Inthetouch_frontend-project-11
-            -Dsonar.projectBaseDir=@hexlet/code

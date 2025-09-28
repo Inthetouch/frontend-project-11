@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 
-export function validationSchema(inputUrl) {
+export default function validationSchema(inputUrl) {
   return yup.string()
     .required('Вы пропустили это поле')
     .url('Ссылка должна быть валидным URL')

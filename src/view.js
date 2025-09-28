@@ -26,7 +26,7 @@ const renderSuccess = () => {
   elements.feedback.textContent = 'RSS успешно загружен'
 }
 
-export function initView(state) {
+export default function initView(state) {
   const watchedState = onChange(state, (path, value) => {
     switch (path) {
       case 'form.error':

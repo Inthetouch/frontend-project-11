@@ -1,7 +1,7 @@
 import validationSchema from './validator.js'
 import initView from './view.js'
 
-export function app() {
+export default function app() {
   const state = {
     form: {
       error: null,

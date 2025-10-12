@@ -1,9 +1,9 @@
 import * as yup from 'yup'
 
-export default function validationSchema(inputUrl) {
+export default function validationSchema(inputUrls) {
   return yup.string()
-    .required('Вы пропустили это поле')
-    .url('Ссылка должна быть валидным URL')
+    .required()
+    .url()
     .trim()
-    .notOneOf(inputUrl, 'Этот RSS уже добавлен')
+    .notOneOf(inputUrls)
 }

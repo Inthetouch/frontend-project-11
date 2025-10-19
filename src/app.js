@@ -48,6 +48,41 @@ function handleFormSubmit(event, watchedState) {
     })
 }
 
+const UPDATE_INTERVAL = 5000
+
+function updateFeeds(watchedState) {
+  const { feeds, posts } = watchedState
+  const existingLinks = new Set(posts.map(post => post.link))
+
+  const promises = feeds.map((feed) => {
+    return loadRss(feed.url)
+      .then(rssString => parseRss(rssString))
+      .then((parsedData) => {
+        const newPostsRaw = parsedData.posts
+          .filter(post => !existingLinks.has(post.link))
+
+        if (newPostsRaw.length > 0) {
+          const newPosts = newPostsRaw.map(post => ({
+            id: _.uniqueId('post_'),
+            feedId: feed.id,
+            title: post.title,
+            link: post.link,
+          }))
+
+          watchedState.posts.unshift(...newPosts)
+        }
+      })
+      .catch((error) => {
+        console.error(`Ошибка при обновлении фида: ${feed.url}`, error)
+      })
+  })
+
+  Promise.allSettled(promises)
+    .finally(() => {
+      setTimeout(() => updateFeeds(watchedState), UPDATE_INTERVAL)
+    })
+}
+
 export default function app() {
   const i18nextInstance = i18next.createInstance()
   i18nextInstance.init({
@@ -95,4 +130,5 @@ export default function app() {
   elements.form.addEventListener('submit', (event) => {
     handleFormSubmit(event, watchedState)
   })
+  updateFeeds(watchedState)
 };

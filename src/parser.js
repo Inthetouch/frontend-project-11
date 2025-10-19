@@ -4,7 +4,7 @@ export default (rssString) => {
 
   const parseError = xmlDoc.querySelector('parseerror')
   if (parseError) {
-    throw new Error(parseError.textContent)
+    throw new Error(parseError)
   }
 
   const feedTitle = xmlDoc.querySelector('channel title').textContent

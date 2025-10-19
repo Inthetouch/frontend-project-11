@@ -15,6 +15,7 @@ export default (url) => {
       return response.data.contents
     })
     .catch((error) => {
-      throw error
+      console.log(error)
+      throw new Error('error')
     })
 }

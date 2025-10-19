@@ -10,5 +10,6 @@ export default {
     error: 'Что-то пошло не так',
     feeds: 'Фиды',
     posts: 'Посты',
+    previewButton: 'Просмотр',
   },
 }

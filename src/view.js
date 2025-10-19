@@ -60,7 +60,7 @@ function renderFeeds(elements, value, i18nextInstance) {
   elements.feeds.append(card)
 }
 
-function renderPosts(elements, value, i18nextInstance) {
+function renderPosts(elements, state, i18nextInstance) {
   elements.posts.innerHTML = ''
 
   const card = document.createElement('div')
@@ -79,16 +79,32 @@ function renderPosts(elements, value, i18nextInstance) {
   const list = document.createElement('ul')
   list.classList.add('list-group', 'border-0', 'rounded-0')
 
-  value.forEach((post) => {
+  const { posts, ui } = state
+  const { readPosts } = ui
+
+  posts.forEach((post) => {
     const li = document.createElement('li')
     li.classList.add('list-group-item', 'border-0', 'border-end-0')
     const a = document.createElement('a')
-    a.classList.add('fw-bold')
     a.href = post.link
     a.target = '_blank'
     a.rel = 'noopener noreferrer'
     a.textContent = post.title
+
+    if (readPosts.has(post.id)) {
+      a.classList.add('fw-normal')
+    }
+    else {
+      a.classList.add('fw-bold')
+    }
+
+    const button = document.createElement('button')
+    button.classList.add('btn', 'btn-outline-primary', 'btn-sm')
+    button.textContent = i18nextInstance.t('previewButton')
+    button.dataset.id = post.id
+
     li.append(a)
+    li.append(button)
     list.append(li)
   })
   cardBody.append(list)
@@ -110,7 +126,10 @@ export default function initView(state, elements, i18nextInstance) {
         renderFeeds(elements, value, i18nextInstance)
         break
       case 'posts':
-        renderPosts(elements, value, i18nextInstance)
+        renderPosts(elements, state, i18nextInstance)
+        break
+      case 'ui.readPosts':
+        renderPosts(elements, state, i18nextInstance)
         break
       default:
         break

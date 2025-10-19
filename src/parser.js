@@ -14,7 +14,8 @@ export default (rssString) => {
   const posts = Array.from(itemElements).map((itemElement) => {
     const postTitle = itemElement.querySelector('title').textContent
     const postLink = itemElement.querySelector('link').textContent
-    return { title: postTitle, link: postLink }
+    const postDescription = itemElement.querySelector('description').textContent
+    return { title: postTitle, link: postLink, description: postDescription }
   })
 
   return {

@@ -1,6 +1,7 @@
 import i18next from 'i18next'
 import * as yup from 'yup'
 import _ from 'lodash'
+import { Modal } from 'bootstrap'
 import texts from './locales/ru.js'
 import initView from './view.js'
 import validationSchema from './validator.js'
@@ -37,6 +38,7 @@ function handleFormSubmit(event, watchedState) {
         feedId,
         title: post.title,
         link: post.link,
+        read: false,
       }))
       watchedState.posts.unshift(...newPosts)
       watchedState.form.error = null
@@ -67,6 +69,7 @@ function updateFeeds(watchedState) {
             feedId: feed.id,
             title: post.title,
             link: post.link,
+            read: false,
           }))
 
           watchedState.posts.unshift(...newPosts)
@@ -110,6 +113,9 @@ export default function app() {
     },
     feeds: [],
     posts: [],
+    ui: {
+      readPosts: new Set(),
+    },
   }
 
   const elements = {
@@ -120,15 +126,33 @@ export default function app() {
     p: document.querySelector('p.lead'),
     posts: document.querySelector('.posts'),
     feeds: document.querySelector('.feeds'),
+    modal: document.querySelector('.modal'),
+    modalTitle: document.querySelector('.modal-title'),
+    modalBody: document.querySelector('.modal-body'),
+    modalArticle: document.querySelector('.full-article'),
   }
 
   elements.h1.textContent = i18nextInstance.t('title')
   elements.p.textContent = i18nextInstance.t('description')
+  const modalInstance = new Modal(elements.modal)
 
   const watchedState = initView(state, elements, i18nextInstance)
 
   elements.form.addEventListener('submit', (event) => {
     handleFormSubmit(event, watchedState)
   })
+
+  elements.posts.addEventListener('click', (event) => {
+    const postId = event.target.dataset.id
+    if (postId) {
+      watchedState.ui.readPosts.add(postId)
+      const postToDisplay = watchedState.posts.find(post => post.id === postId)
+      elements.modalTitle.textContent = postToDisplay.title
+      elements.modalBody.textContent = postToDisplay.description
+      elements.modalArticle.href = postToDisplay.link
+      modalInstance.show()
+    }
+  })
+
   updateFeeds(watchedState)
 };

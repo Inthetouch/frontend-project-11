@@ -38,6 +38,7 @@ function handleFormSubmit(event, watchedState) {
         feedId,
         title: post.title,
         link: post.link,
+        description: post.description,
         read: false,
       }))
       watchedState.posts.unshift(...newPosts)
@@ -69,6 +70,7 @@ function updateFeeds(watchedState) {
             feedId: feed.id,
             title: post.title,
             link: post.link,
+            description: post.description,
             read: false,
           }))
 

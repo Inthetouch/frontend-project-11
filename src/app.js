@@ -83,6 +83,8 @@ export default function app() {
     feedback: document.querySelector('.feedback'),
     h1: document.querySelector('h1'),
     p: document.querySelector('p.lead'),
+    posts: document.querySelector('.posts'),
+    feeds: document.querySelector('.feeds'),
   }
 
   elements.h1.textContent = i18nextInstance.t('title')

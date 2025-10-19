@@ -8,5 +8,7 @@ export default {
     validate: 'Валидация успешна',
     success: 'RSS успешно загружен',
     error: 'Что-то пошло не так',
+    feeds: 'Фиды',
+    posts: 'Посты',
   },
 }

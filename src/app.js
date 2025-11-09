@@ -145,14 +145,17 @@ export default function app() {
 
     elements.posts.addEventListener('click', (event) => {
       const postId = event.target.dataset.id
-      if (postId) {
-        watchedState.ui.readPosts.add(postId)
-        const postToDisplay = watchedState.posts.find(post => post.id === postId)
-        elements.modalTitle.textContent = postToDisplay.title
-        elements.modalBody.textContent = postToDisplay.description
-        elements.modalArticle.href = postToDisplay.link
-        modalInstance.show()
+
+      if (!postId) {
+        return
       }
+
+      watchedState.ui.readPosts.add(postId)
+      const postToDisplay = watchedState.posts.find(post => post.id === postId)
+      elements.modalTitle.textContent = postToDisplay.title
+      elements.modalBody.textContent = postToDisplay.description
+      elements.modalArticle.href = postToDisplay.link
+      modalInstance.show()
     })
 
     updateFeeds(watchedState)

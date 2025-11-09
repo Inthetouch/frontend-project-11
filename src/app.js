@@ -9,6 +9,8 @@ import parseRss from './parser.js'
 
 function handleFormSubmit(event, watchedState) {
   event.preventDefault()
+  watchedState.form.status = 'loading'
+
   const formData = new FormData(event.target)
   const url = formData.get('url')
 
@@ -47,6 +49,9 @@ function handleFormSubmit(event, watchedState) {
     .catch((error) => {
       watchedState.form.valid = false
       watchedState.form.error = error.message
+    })
+    .finally(() => {
+      watchedState.form.status = 'filling'
     })
 }
 
@@ -110,6 +115,7 @@ export default function app() {
       form: {
         error: null,
         valid: false,
+        status: 'filling',
       },
       feeds: [],
       posts: [],
@@ -130,6 +136,7 @@ export default function app() {
       modalTitle: document.querySelector('.modal-title'),
       modalBody: document.querySelector('.modal-body'),
       modalArticle: document.querySelector('.full-article'),
+      submitButton: document.querySelector('button[type="submit"]'),
     }
 
     elements.h1.textContent = i18nextInstance.t('title')

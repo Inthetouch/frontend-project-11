@@ -1,5 +1,18 @@
 import onChange from 'on-change'
 
+const renderFormStatus = (elements, status) => {
+  switch (status) {
+    case 'loading':
+      elements.input.setAttribute('readonly', true)
+      elements.submitButton.setAttribute('disabled', true)
+      break
+    case 'filling':
+    default:
+      elements.input.removeAttribute('readonly')
+      elements.submitButton.removeAttribute('disabled')
+  }
+}
+
 const renderError = (elements, error, i18nextInstance) => {
   if (error) {
     elements.input.classList.add('is-invalid')
@@ -132,6 +145,9 @@ export default function initView(state, elements, i18nextInstance) {
         break
       case 'ui.readPosts':
         renderPosts(elements, state, i18nextInstance)
+        break
+      case 'form.status':
+        renderFormStatus(elements, value)
         break
       default:
         break

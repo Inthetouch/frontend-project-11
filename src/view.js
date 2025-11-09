@@ -102,6 +102,8 @@ function renderPosts(elements, state, i18nextInstance) {
     button.classList.add('btn', 'btn-outline-primary', 'btn-sm')
     button.textContent = i18nextInstance.t('previewButton')
     button.dataset.id = post.id
+    button.dataset.bsToggle = 'modal'
+    button.dataset.bsTarget = '#modal'
 
     li.append(a)
     li.append(button)

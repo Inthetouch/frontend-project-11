@@ -1,7 +1,6 @@
 import i18next from 'i18next'
 import * as yup from 'yup'
 import _ from 'lodash'
-import { Modal } from 'bootstrap'
 import texts from './locales/ru.js'
 import initView from './view.js'
 import validationSchema from './validator.js'
@@ -135,7 +134,6 @@ export default function app() {
 
     elements.h1.textContent = i18nextInstance.t('title')
     elements.p.textContent = i18nextInstance.t('description')
-    const modalInstance = new Modal(elements.modal)
 
     const watchedState = initView(state, elements, i18nextInstance)
 
@@ -143,19 +141,20 @@ export default function app() {
       handleFormSubmit(event, watchedState)
     })
 
-    elements.posts.addEventListener('click', (event) => {
-      const postId = event.target.dataset.id
+    elements.modal.addEventListener('show.bs.modal', (event) => {
+      const button = event.relatedTarget
+      const postId = button.dataset.id
 
       if (!postId) {
         return
       }
 
-      watchedState.ui.readPosts.add(postId)
       const postToDisplay = watchedState.posts.find(post => post.id === postId)
+
       elements.modalTitle.textContent = postToDisplay.title
       elements.modalBody.textContent = postToDisplay.description
       elements.modalArticle.href = postToDisplay.link
-      modalInstance.show()
+      watchedState.ui.readPosts.add(postId)
     })
 
     updateFeeds(watchedState)

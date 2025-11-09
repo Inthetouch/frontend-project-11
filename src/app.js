@@ -96,65 +96,67 @@ export default function app() {
     resources: {
       ru: texts,
     },
-  })
+  }).then(() => {
+    yup.setLocale({
+      string: {
+        url: 'notUrl',
+      },
+      mixed: {
+        required: 'required',
+        notOneOf: 'duplicate',
+      },
+    })
 
-  yup.setLocale({
-    string: {
-      url: 'notUrl',
-    },
-    mixed: {
-      required: 'required',
-      notOneOf: 'duplicate',
-    },
-  })
-
-  const state = {
-    form: {
-      error: null,
-      valid: false,
-    },
-    feeds: [],
-    posts: [],
-    ui: {
-      readPosts: new Set(),
-    },
-  }
-
-  const elements = {
-    form: document.querySelector('.rss-form'),
-    input: document.querySelector('#url-input'),
-    feedback: document.querySelector('.feedback'),
-    h1: document.querySelector('h1'),
-    p: document.querySelector('p.lead'),
-    posts: document.querySelector('.posts'),
-    feeds: document.querySelector('.feeds'),
-    modal: document.querySelector('.modal'),
-    modalTitle: document.querySelector('.modal-title'),
-    modalBody: document.querySelector('.modal-body'),
-    modalArticle: document.querySelector('.full-article'),
-  }
-
-  elements.h1.textContent = i18nextInstance.t('title')
-  elements.p.textContent = i18nextInstance.t('description')
-  const modalInstance = new Modal(elements.modal)
-
-  const watchedState = initView(state, elements, i18nextInstance)
-
-  elements.form.addEventListener('submit', (event) => {
-    handleFormSubmit(event, watchedState)
-  })
-
-  elements.posts.addEventListener('click', (event) => {
-    const postId = event.target.dataset.id
-    if (postId) {
-      watchedState.ui.readPosts.add(postId)
-      const postToDisplay = watchedState.posts.find(post => post.id === postId)
-      elements.modalTitle.textContent = postToDisplay.title
-      elements.modalBody.textContent = postToDisplay.description
-      elements.modalArticle.href = postToDisplay.link
-      modalInstance.show()
+    const state = {
+      form: {
+        error: null,
+        valid: false,
+      },
+      feeds: [],
+      posts: [],
+      ui: {
+        readPosts: new Set(),
+      },
     }
-  })
 
-  updateFeeds(watchedState)
+    const elements = {
+      form: document.querySelector('.rss-form'),
+      input: document.querySelector('#url-input'),
+      feedback: document.querySelector('.feedback'),
+      h1: document.querySelector('h1'),
+      p: document.querySelector('p.lead'),
+      posts: document.querySelector('.posts'),
+      feeds: document.querySelector('.feeds'),
+      modal: document.querySelector('.modal'),
+      modalTitle: document.querySelector('.modal-title'),
+      modalBody: document.querySelector('.modal-body'),
+      modalArticle: document.querySelector('.full-article'),
+    }
+
+    elements.h1.textContent = i18nextInstance.t('title')
+    elements.p.textContent = i18nextInstance.t('description')
+    const modalInstance = new Modal(elements.modal)
+
+    const watchedState = initView(state, elements, i18nextInstance)
+
+    elements.form.addEventListener('submit', (event) => {
+      handleFormSubmit(event, watchedState)
+    })
+
+    elements.posts.addEventListener('click', (event) => {
+      const postId = event.target.dataset.id
+      if (postId) {
+        watchedState.ui.readPosts.add(postId)
+        const postToDisplay = watchedState.posts.find(post => post.id === postId)
+        elements.modalTitle.textContent = postToDisplay.title
+        elements.modalBody.textContent = postToDisplay.description
+        elements.modalArticle.href = postToDisplay.link
+        modalInstance.show()
+      }
+    })
+
+    updateFeeds(watchedState)
+  }).catch((error) => {
+    console.error('Ошибка инициализации i18next:', error)
+  })
 };

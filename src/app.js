@@ -148,6 +148,22 @@ export default function app() {
       handleFormSubmit(event, watchedState)
     })
 
+    elements.modal.addEventListener('show.bs.modal', (event) => {
+      const button = event.relatedTarget
+      const postId = button.dataset.id
+
+      if (!postId) {
+        return
+      }
+
+      const postToDisplay = state.posts.find(post => post.id === postId)
+
+      elements.modalTitle.textContent = postToDisplay.title
+      elements.modalBody.textContent = postToDisplay.description
+      elements.modalArticle.href = postToDisplay.link
+      watchedState.ui.readPosts.add(postId)
+    })
+
     updateFeeds(watchedState)
   }).catch((error) => {
     console.error('Ошибка инициализации i18next:', error)
